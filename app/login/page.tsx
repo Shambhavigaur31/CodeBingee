@@ -1,20 +1,26 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { FcGoogle } from "react-icons/fc"
-import { useRouter } from "next/navigation"
-import { signIn } from 'next-auth/react'
-
-
-
+import { signIn, useSession } from "next-auth/react"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function AuthPage() {
   const router = useRouter()
+  const pathname = usePathname()
   const [formData, setFormData] = useState({ username: "", password: "" })
   const [isLogin, setIsLogin] = useState(true)
+  const { setUsername } = useAuth()
+  const { data: session } = useSession()
+
+  // Update isLogin mode based on URL
+  useEffect(() => {
+    setIsLogin(pathname === "/login")
+  }, [pathname])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -32,6 +38,8 @@ export default function AuthPage() {
 
     if (res.ok) {
       localStorage.setItem("token", data.token)
+      localStorage.setItem("username", formData.username)
+      setUsername(formData.username)
       router.push("/")
     } else {
       alert(data.message)
@@ -39,7 +47,18 @@ export default function AuthPage() {
   }
 
   const handleGoogleLogin = () => {
-    signIn('google', { callbackUrl: '/' }) // NextAuth handles the redirect and callback;
+    signIn("google", { callbackUrl: "/" })
+  }
+
+  useEffect(() => {
+    if (session?.user?.name) {
+      setUsername(session.user.name)
+      localStorage.setItem("username", session.user.name)
+    }
+  }, [session, setUsername])
+
+  const toggleMode = () => {
+    router.push(isLogin ? "/register" : "/login")
   }
 
   return (
@@ -77,7 +96,7 @@ export default function AuthPage() {
             <p className="text-center text-sm mt-2">
               {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
               <button
-                onClick={() => setIsLogin(!isLogin)}
+                onClick={toggleMode}
                 className="text-blue-600 hover:underline"
               >
                 {isLogin ? "Register" : "Login"}

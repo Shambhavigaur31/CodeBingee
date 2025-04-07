@@ -39,7 +39,7 @@ export default function DashboardPage() {
       <div className="mt-6">
         <h2 className="mb-4 text-2xl font-semibold">Platforms</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <PlatformStats platform="CodeChef" username="codechef" solved={62} icon="🍴" />
+          <PlatformStats platform="CodeChef" username="codechef" solved={0} icon="🍴" />
           <PlatformStats platform="Codeforces" username="codeforces" solved={286} icon="📊" />
           <PlatformStats platform="LeetCode" username="leetcode" solved={670} icon="⚡" />
           <PlatformStats platform="GeeksforGeeks" username="gfg" solved={124} icon="👨‍💻" />

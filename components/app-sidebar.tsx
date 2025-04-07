@@ -1,9 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { BarChart3, Calendar, Code2, Home, MessageSquare, Settings } from "lucide-react"
+import { useAuth } from "@/contexts/auth-context"
+import { signOut, useSession } from "next-auth/react"
+
+import {
+  BarChart3,
+  Calendar,
+  Code2,
+  Home,
+  MessageSquare,
+  Settings,
+  LogOut,
+} from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -19,18 +30,25 @@ import { ThemeToggle } from "@/components/theme-toggle"
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const { username: localUsername, setUsername } = useAuth()
+  const { data: session } = useSession()
   const [open, setOpen] = useState(true)
 
-  const menuItems = [
-   
-    
-    {
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    localStorage.removeItem("username")
+    setUsername("")
+    signOut({ callbackUrl: "/" })
+  }
 
-      title:"Register/Login",
+  const displayUsername = session?.user?.name || localUsername || "Guest"
+
+  const menuItems = [
+    {
+      title: "Register/Login",
       icon: Settings,
       href: "/login",
     },
-    
     {
       title: "Dashboard",
       icon: Home,
@@ -56,7 +74,6 @@ export function AppSidebar() {
       icon: Code2,
       href: "/assistant",
     },
-    
   ]
 
   return (
@@ -69,6 +86,7 @@ export function AppSidebar() {
           <span className="text-xl font-bold tracking-wider text-white">CODEFOLIO</span>
         </div>
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarMenu>
           {menuItems.map((item) => (
@@ -83,27 +101,33 @@ export function AppSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
+
       <SidebarFooter className="p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Avatar>
-              <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-sm font-medium">John Doe</p>
-              <p className="text-xs text-muted-foreground">Coding Innovator</p>
+        <div className="flex flex-col gap-3 w-full">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Avatar>
+                <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-sm font-medium">{displayUsername}</p>
+                <p className="text-xs text-muted-foreground">Coding Innovator</p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Button variant="ghost" size="icon">
-              <Settings className="h-4 w-4" />
-            </Button>
           </div>
+
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            className="w-full flex items-center gap-2 justify-center text-sm"
+          >
+            <LogOut size={16} />
+            Logout
+          </Button>
         </div>
       </SidebarFooter>
     </Sidebar>
   )
 }
-
