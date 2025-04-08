@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google"
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import clientPromise from "@/lib/mongodb"
 
-const handler = NextAuth({
+export const handler = NextAuth({
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     GoogleProvider({
@@ -17,6 +17,8 @@ const handler = NextAuth({
       // Add the user ID to the session
       if (session.user) {
         session.user.id = user.id;
+        
+        
       }
       return session;
     },
