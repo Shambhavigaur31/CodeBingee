@@ -83,7 +83,7 @@ export function AppSidebar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-secondary">
             <Code2 className="h-5 w-5 text-neon-cyan" />
           </div>
-          <span className="text-xl font-bold tracking-wider text-white">CODEFOLIO</span>
+          <span className="text-xl font-bold tracking-wider text-white">CodeBinge</span>
         </div>
       </SidebarHeader>
 

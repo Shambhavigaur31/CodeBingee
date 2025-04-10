@@ -15,9 +15,7 @@ export function UserOverview({solved,easy,medium,hard}: UserOverviewProps) {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-medium">Solved Problems</CardTitle>
-          <Badge variant="outline" className="bg-secondary/50">
-            0 Solved today
-          </Badge>
+          
         </div>
       </CardHeader>
       <CardContent>
@@ -36,6 +34,9 @@ export function UserOverview({solved,easy,medium,hard}: UserOverviewProps) {
           </Badge>
           <Badge variant="secondary" className="bg-secondary/50">
             Hard: {hard}
+          </Badge>
+          <Badge variant="outline" className="bg-secondary/50">
+            (Based on LeetCode and GFG)
           </Badge>
         </div>
       </CardContent>

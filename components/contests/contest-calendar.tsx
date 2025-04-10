@@ -1,21 +1,35 @@
-"use client"
+"use client";
+import { useState } from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+interface Contest {
+  id: number;
+  day: number;
+  month: string;
+  platform: string;
+  name: string;
+  date: string;
+  time: string;
+  duration: string;
+  added: boolean;
+  icon: string;
+}
 
-export function ContestCalendar() {
-  const [currentMonth, setCurrentMonth] = useState("Sep 2024")
+type ContestCalendarProps = {
+  contests: Contest[] | undefined | null;
+};
 
-  // Generate calendar data
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-  const dates = Array.from({ length: 30 }, (_, i) => i + 1)
+export function ContestCalendar({ contests }: ContestCalendarProps) {
+  const [currentMonth, setCurrentMonth] = useState("Sep 2024");
+  const [selectedDate, setSelectedDate] = useState(9);
 
-  // Contest indicators (red dots)
-  const contestDays = [11, 12, 15, 18, 19, 20, 23, 30]
+  // Ensure contests is an array to avoid .map errors
+  const safeContests = Array.isArray(contests) ? contests : [];
+  const contestDays = safeContests.map((contest) => contest.day);
 
-  // Current selected date
-  const [selectedDate, setSelectedDate] = useState(9)
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const dates = Array.from({ length: 30 }, (_, i) => i + 1);
 
   return (
     <Card className="glow-card">
@@ -36,7 +50,7 @@ export function ContestCalendar() {
             </div>
           ))}
 
-          {/* Empty cells for days before the 1st */}
+          {/* Optional empty divs for padding start of calendar grid */}
           {Array.from({ length: 0 }, (_, i) => (
             <div key={`empty-${i}`} className="h-8" />
           ))}
@@ -45,7 +59,9 @@ export function ContestCalendar() {
             <div
               key={date}
               className={`relative flex h-8 cursor-pointer items-center justify-center rounded-md text-sm transition-colors ${
-                date === selectedDate ? "bg-secondary/80 font-medium text-white" : "hover:bg-secondary/50"
+                date === selectedDate
+                  ? "bg-secondary/80 font-medium text-white"
+                  : "hover:bg-secondary/50"
               }`}
               onClick={() => setSelectedDate(date)}
             >
@@ -60,6 +76,5 @@ export function ContestCalendar() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
-

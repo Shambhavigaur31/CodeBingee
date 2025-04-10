@@ -16,14 +16,22 @@ import { useSession } from "next-auth/react"
 export default function DashboardPage() {
   const [codeforcesData, setCodeforcesData] = useState({ solved: 0, username: "loading..." })
   const [codechefData, setCodechefData] = useState({ solved: 0, username: "loading..." })
-  const [leetcodeData, setLeetcodeData] = useState({ solved: 0, username: "loading..." ,medium:0,easy:0,hard:0})
-  const [gfgData, setGfgData] = useState({ solved: 0, username: "loading..." })
+  const [leetcodeData, setLeetcodeData] = useState({ solved: 0, username: "loading..." ,medium:0,easy:0,hard:0,calendar:{'0':0}})
+  const [gfgData, setGfgData] = useState({ solved: 0, username: "loading..." ,easy:0,medium:0,hard:0})
   const { username: localUsername, setUsername } = useAuth()
   const { data: session } = useSession()
+  const displayUsername = session?.user?.name || localUsername
+  useEffect(() => {
+    if(!displayUsername) return;
+    if (session?.user?.name) {
+      setUsername(session.user.name)
+      localStorage.setItem("username", session.user.name)
+    }
+  }, [session, setUsername,displayUsername])
 
   
-  const displayUsername = session?.user?.name || localUsername
-  console.log(displayUsername)
+  
+  
   useEffect(() => {
     if (!displayUsername) return;
 
@@ -88,7 +96,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <UserOverview solved={gfgData.solved+codechefData.solved+leetcodeData.solved+codeforcesData.solved} easy={leetcodeData.easy} medium={leetcodeData.medium} hard={leetcodeData.hard} />
+        <UserOverview solved={gfgData.solved+codechefData.solved+leetcodeData.solved+codeforcesData.solved} easy={leetcodeData.easy+gfgData.easy} medium={leetcodeData.medium+gfgData.medium} hard={leetcodeData.hard+gfgData.hard} />
         <DailyStreak />
         <WeeklyTarget />
       </div>
@@ -123,12 +131,14 @@ export default function DashboardPage() {
       </div>
 
       <div className="mt-6">
-        <PerformanceAnalysis />
+        <ContributionCalendar calendar={leetcodeData.calendar} />
       </div>
 
       <div className="mt-6">
-        <ContributionCalendar />
+        <PerformanceAnalysis calendar={leetcodeData.calendar} />
       </div>
+
+      
 
       
 

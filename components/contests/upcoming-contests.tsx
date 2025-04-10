@@ -1,50 +1,36 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Calendar, Clock, Zap } from "lucide-react"
+"use client";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Clock, Zap } from "lucide-react";
 
-const contests = [
-  {
-    id: 1,
-    day: 11,
-    month: "Sep",
-    platform: "CodeChef",
-    name: "Starters 151",
-    date: "11 Sep 2024",
-    time: "08:00 PM - 10:00 PM",
-    duration: "2 hrs",
-    added: true,
-    icon: "🍴",
-  },
-  {
-    id: 2,
-    day: 12,
-    month: "Sep",
-    platform: "CodeStudio",
-    name: "Weekly Contest 143",
-    date: "12 Sep 2024",
-    time: "02:30 PM - 04:30 PM",
-    duration: "2 hrs",
-    added: true,
-    icon: "🚀",
-  },
-  {
-    id: 3,
-    day: 14,
-    month: "Sep",
-    platform: "LeetCode",
-    name: "Biweekly Contest 139",
-    date: "14 Sep 2024",
-    time: "02:30 PM - 04:00 PM",
-    duration: "1 hr 30 mins",
-    added: false,
-    icon: "⚡",
-  },
-]
+interface Contest {
+  id: number | string;
+  day: number;
+  month: string;
+  platform: string;
+  name: string;
+  date: string;
+  time: string;
+  duration: string;
+  added: boolean;
+  icon: string;
+}
 
-export function UpcomingContests() {
+interface UpcomingContestsProps {
+  contests?: Contest[] | null;
+  onAdd: (contest: Contest) => void; // <-- Add this
+}
+
+export function UpcomingContests({ contests, onAdd }: UpcomingContestsProps) {
+  const safeContests = Array.isArray(contests) ? contests : [];
+
+  if (safeContests.length === 0) {
+    return <div className="text-center text-muted-foreground">No upcoming contests found.</div>;
+  }
+
   return (
     <div className="space-y-4">
-      {contests.map((contest) => (
+      {safeContests.map((contest) => (
         <Card key={contest.id} className="glow-card overflow-hidden">
           <CardContent className="p-0">
             <div className="flex">
@@ -78,8 +64,12 @@ export function UpcomingContests() {
                     <span className="text-sm">{contest.duration}</span>
                   </div>
                   <button
-                    className={`rounded-md px-3 py-1 text-sm ${
-                      contest.added ? "bg-teal-900/50 text-teal-400" : "bg-secondary/50 hover:bg-secondary/80"
+                    disabled={contest.added}
+                    onClick={() => onAdd(contest)} // Call parent handler
+                    className={`rounded-md px-3 py-1 text-sm transition ${
+                      contest.added
+                        ? "bg-teal-900/50 text-teal-400 cursor-default"
+                        : "bg-secondary/50 hover:bg-secondary/80"
                     }`}
                   >
                     {contest.added ? "Added to Calendar" : "Add to Calendar"}
@@ -91,6 +81,5 @@ export function UpcomingContests() {
         </Card>
       ))}
     </div>
-  )
+  );
 }
-

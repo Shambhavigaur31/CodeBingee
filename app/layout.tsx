@@ -7,7 +7,7 @@ import { Providers } from "./providers"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Codefolio - Coding Profile Dashboard",
+  title: "CodeBinge - Coding Profile Dashboard",
   description: "Track your coding journey across multiple platforms",
   generator: "v0.dev",
 }

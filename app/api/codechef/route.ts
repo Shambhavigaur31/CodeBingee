@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     const db = client.db("CodeBinge") // 🔁 Replace with your DB name
 
     // Replace with dynamic username if using auth
-    const user = await db.collection("users").findOne({ username: "aayueshmaan" })
+    const user = await db.collection("users").findOne({ username: username })
 
     if (!user || !user.profiles?.codechef) {
       return NextResponse.json({ error: "CodeChef handle not found" ,status: 404 })

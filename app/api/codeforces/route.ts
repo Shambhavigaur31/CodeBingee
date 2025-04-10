@@ -5,7 +5,7 @@ import clientPromise from "@/lib/mongodb"
 import axios from "axios"
 
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+
 
 export async function POST(request: Request) {
   try {

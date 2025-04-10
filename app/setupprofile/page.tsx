@@ -1,10 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState ,useEffect} from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { signIn, useSession } from "next-auth/react"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function SetupProfile() {
   const [formData, setFormData] = useState({
@@ -14,6 +16,14 @@ export default function SetupProfile() {
     gfg: "",
   })
   const router = useRouter()
+  const { setUsername } = useAuth()
+  const { data: session } = useSession()
+  useEffect(() => {
+      if (session?.user?.name) {
+        setUsername(session.user.name)
+        localStorage.setItem("username", session.user.name)
+      }
+    }, [session, setUsername])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
