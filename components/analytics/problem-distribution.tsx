@@ -4,29 +4,58 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
 
-const difficultyData = [
-  { name: "Easy", value: 145, color: "#22c55e" },
-  { name: "Medium", value: 98, color: "#eab308" },
-  { name: "Hard", value: 43, color: "#ef4444" },
-]
+interface ProblemDistributionProps {
+  leetcodeData: {
+    easy: number
+    medium: number
+    hard: number
+    total: number
+  }
+  gfgData: {
+    easy: number
+    medium: number
+    hard: number
+    total: number
+  }
+  codeforcesTotal: number
+  codechefTotal: number
+}
 
-const topicData = [
-  { name: "Arrays", value: 75, color: "#3b82f6" },
-  { name: "Strings", value: 45, color: "#8b5cf6" },
-  { name: "DP", value: 38, color: "#ec4899" },
-  { name: "Trees", value: 32, color: "#10b981" },
-  { name: "Graphs", value: 28, color: "#f97316" },
-  { name: "Others", value: 68, color: "#6b7280" },
-]
+export function ProblemDistribution({ leetcodeData, gfgData, codeforcesTotal, codechefTotal }: ProblemDistributionProps) {
+  const difficultyData = [
+    {
+      name: "Easy",
+      value: leetcodeData.easy + gfgData.easy,
+      color: "#22c55e",
+    },
+    {
+      name: "Medium",
+      value: leetcodeData.medium + gfgData.medium,
+      color: "#eab308",
+    },
+    {
+      name: "Hard",
+      value: leetcodeData.hard + gfgData.hard,
+      color: "#ef4444",
+    },
+  ]
 
-const platformData = [
-  { name: "LeetCode", value: 120, color: "#eab308" },
-  { name: "Codeforces", value: 85, color: "#3b82f6" },
-  { name: "CodeChef", value: 45, color: "#8b5cf6" },
-  { name: "GeeksforGeeks", value: 36, color: "#10b981" },
-]
+  const topicData = [
+    { name: "Arrays", value: 75, color: "#3b82f6" },
+    { name: "Strings", value: 45, color: "#8b5cf6" },
+    { name: "DP", value: 38, color: "#ec4899" },
+    { name: "Trees", value: 32, color: "#10b981" },
+    { name: "Graphs", value: 28, color: "#f97316" },
+    { name: "Others", value: 68, color: "#6b7280" },
+  ]
 
-export function ProblemDistribution() {
+  const platformData = [
+    { name: "LeetCode", value: leetcodeData.total, color: "#eab308" },
+    { name: "GeeksforGeeks", value: gfgData.total, color: "#10b981" },
+    { name: "Codeforces", value: codeforcesTotal, color: "#3b82f6" },
+    { name: "CodeChef", value: codechefTotal, color: "#8b5cf6" },
+  ]
+
   return (
     <Card className="glow-card">
       <CardHeader className="pb-2">
@@ -137,4 +166,3 @@ export function ProblemDistribution() {
     </Card>
   )
 }
-

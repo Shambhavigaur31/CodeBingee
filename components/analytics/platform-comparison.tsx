@@ -20,46 +20,58 @@ export function PlatformComparison({
   friendScore,
 }: PlatformComparisonProps) {
   const total = yourScore + friendScore
-  const yourPercentage = (yourScore / total) * 100
-  const friendPercentage = (friendScore / total) * 100
+  const yourPercentage = total ? (yourScore / total) * 100 : 0
+  const friendPercentage = total ? (friendScore / total) * 100 : 0
+
+  const outerRadius = 16
+  const innerRadius = 12
+  const outerCircumference = 2 * Math.PI * outerRadius
+  const innerCircumference = 2 * Math.PI * innerRadius
 
   return (
     <Card className="glow-card overflow-hidden">
       <CardContent className="p-4">
         <div className="flex items-center gap-2">
           <div className="text-xl">{icon}</div>
-          <h3 className="font-semibold">{platform}</h3>
+          <h3 className="font-semibold capitalize">{platform}</h3>
         </div>
 
         <div className="mt-4 flex justify-center">
           <div className="relative h-32 w-32">
             <svg className="h-32 w-32" viewBox="0 0 36 36">
               {/* Background circle */}
-              <circle cx="18" cy="18" r="16" fill="none" className="stroke-secondary" strokeWidth="3.8" />
-
-              {/* Friend's progress */}
               <circle
                 cx="18"
                 cy="18"
-                r="16"
+                r={outerRadius}
+                fill="none"
+                className="stroke-secondary"
+                strokeWidth="3.8"
+              />
+
+              {/* Friend's progress (outer) */}
+              <circle
+                cx="18"
+                cy="18"
+                r={outerRadius}
                 fill="none"
                 className="stroke-yellow-400"
                 strokeWidth="3.8"
-                strokeDasharray="100"
-                strokeDashoffset={100 - friendPercentage}
+                strokeDasharray={outerCircumference}
+                strokeDashoffset={(1 - friendPercentage / 100) * outerCircumference}
                 transform="rotate(-90 18 18)"
               />
 
-              {/* Your progress */}
+              {/* Your progress (inner) */}
               <circle
                 cx="18"
                 cy="18"
-                r="12"
+                r={innerRadius}
                 fill="none"
                 className="stroke-neon-cyan"
                 strokeWidth="3.8"
-                strokeDasharray="100"
-                strokeDashoffset={100 - yourPercentage}
+                strokeDasharray={innerCircumference}
+                strokeDashoffset={(1 - yourPercentage / 100) * innerCircumference}
                 transform="rotate(-90 18 18)"
               />
             </svg>
@@ -80,4 +92,3 @@ export function PlatformComparison({
     </Card>
   )
 }
-
