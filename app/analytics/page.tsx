@@ -9,8 +9,9 @@ import { ProblemDistribution } from "@/components/analytics/problem-distribution
 
 export default function AnalyticsPage() {
   const [profiles, setProfiles] = useState<ProfileData[]>([])
-  const [leetcodeDifficulty, setLeetcodeDifficulty] = useState<DifficultyData|null>(null)
-  const [gfgDifficulty, setGfgDifficulty] = useState<DifficultyData|null>(null)
+  const [leetcodeDifficulty, setLeetcodeDifficulty] = useState<DifficultyData>()
+  const [gfgDifficulty, setGfgDifficulty] = useState<DifficultyData>()
+  const [triggerFetch, setTriggerFetch] = useState(false)
 
   const icons = {
     codeforces: "📊",
@@ -18,8 +19,6 @@ export default function AnalyticsPage() {
     codechef: "🍴",
     gfg: "👨‍💻",
   }
-
-  const [triggerFetch, setTriggerFetch] = useState(false)
 
   useEffect(() => {
     const yourUsernames = JSON.parse(localStorage.getItem("usernames") || "{}")
@@ -109,9 +108,9 @@ export default function AnalyticsPage() {
           const data = await res.json()
           const solved = data.info?.totalProblemsSolved || 0
           const difficulty = {
-            easy: data.info?.solvedStats.easy.count || 0,
-            medium: data.info?.solvedStats.medium.count || 0,
-            hard: data.info?.solvedStats.hard.count || 0,
+            easy: data.info?.solvedStats?.easy?.count || 0,
+            medium: data.info?.solvedStats?.medium?.count || 0,
+            hard: data.info?.solvedStats?.hard?.count || 0,
             total: solved,
           }
           return { total: solved, difficulty }
@@ -140,8 +139,15 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <ProblemDistribution leetcodeData={leetcodeDifficulty || { easy: 0, medium: 0, hard: 0, total: 0 }} gfgData={gfgDifficulty || { easy: 0, medium: 0, hard: 0, total: 0 }} codeforcesTotal={profiles.find((p) => p.platform === "codeforces")?.yourScore || 0}
-  codechefTotal={profiles.find((p) => p.platform === "codechef")?.yourScore || 0}/>
+        {leetcodeDifficulty && gfgDifficulty && (
+          <ProblemDistribution
+            leetcodeData={leetcodeDifficulty}
+            gfgData={gfgDifficulty}
+            codeforcesTotal={profiles.find((p) => p.platform === "codeforces")?.yourScore || 0}
+            codechefTotal={profiles.find((p) => p.platform === "codechef")?.yourScore || 0}
+          />
+        )}
+
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
           {profiles.map((profile) => (
             <PlatformComparison
