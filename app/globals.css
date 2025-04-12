@@ -126,3 +126,16 @@
   transition: stroke-dashoffset 0.5s ease;
 }
 
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 2px var(--accent), 0 0 4px var(--accent), 0 0 8px var(--accent);
+  }
+  100% {
+    text-shadow: 0 0 4px var(--accent), 0 0 8px var(--accent), 0 0 12px var(--accent);
+  }
+}
+
+.animate-glow {
+  animation: glow 1.5s ease-in-out infinite alternate;
+}

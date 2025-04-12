@@ -64,12 +64,12 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-md p-6 shadow-lg">
-        <CardContent>
-          <h2 className="text-2xl font-semibold mb-6 text-center">
-            {isLogin ? "Login to CodeBinge" : "Create a CodeBinge Account"}
-          </h2>
+    <div className="flex justify-center items-center min-h-screen bg-background text-foreground px-4">
+  <Card className="w-full max-w-md p-6 border border-border bg-card rounded-2xl shadow-xl">
+    <CardContent>
+      <h2 className="text-3xl font-extrabold mb-6 text-center text-accent animate-pulse">
+        {isLogin ? "Login to CodeBinge" : "Create a CodeBinge Account"}
+      </h2>
           <div className="space-y-4">
             <Input
               name="username"
