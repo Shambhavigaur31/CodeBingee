@@ -9,8 +9,8 @@ import { ProblemDistribution } from "@/components/analytics/problem-distribution
 
 export default function AnalyticsPage() {
   const [profiles, setProfiles] = useState<ProfileData[]>([])
-  const [leetcodeDifficulty, setLeetcodeDifficulty] = useState<DifficultyData | null>(null)
-  const [gfgDifficulty, setGfgDifficulty] = useState<DifficultyData | null>(null)
+  const [leetcodeDifficulty, setLeetcodeDifficulty] = useState<DifficultyData|null>(null)
+  const [gfgDifficulty, setGfgDifficulty] = useState<DifficultyData|null>(null)
 
   const icons = {
     codeforces: "📊",
@@ -140,7 +140,7 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <ProblemDistribution leetcodeData={leetcodeDifficulty} gfgData={gfgDifficulty} codeforcesTotal={profiles.find((p) => p.platform === "codeforces")?.yourScore || 0}
+        <ProblemDistribution leetcodeData={leetcodeDifficulty || { easy: 0, medium: 0, hard: 0, total: 0 }} gfgData={gfgDifficulty || { easy: 0, medium: 0, hard: 0, total: 0 }} codeforcesTotal={profiles.find((p) => p.platform === "codeforces")?.yourScore || 0}
   codechefTotal={profiles.find((p) => p.platform === "codechef")?.yourScore || 0}/>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
           {profiles.map((profile) => (
