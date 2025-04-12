@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, Zap } from "lucide-react";
 
 interface Contest {
-  id: number | string;
+  id: string;
   day: number;
   month: string;
   platform: string;
@@ -18,7 +18,7 @@ interface Contest {
 
 interface UpcomingContestsProps {
   contests?: Contest[] | null;
-  onAdd: (contest: Contest) => void; // <-- Add this
+  onAdd: (contest: Contest) => void;
 }
 
 export function UpcomingContests({ contests, onAdd }: UpcomingContestsProps) {
@@ -30,8 +30,11 @@ export function UpcomingContests({ contests, onAdd }: UpcomingContestsProps) {
 
   return (
     <div className="space-y-4">
-      {safeContests.map((contest) => (
-        <Card key={contest.id} className="glow-card overflow-hidden">
+      {safeContests.map((contest, index) => (
+        <Card
+          key={`${contest.id}-${index}`} // ensure unique key
+          className="glow-card overflow-hidden"
+        >
           <CardContent className="p-0">
             <div className="flex">
               <div className="flex w-16 flex-col items-center justify-center bg-secondary/30 p-4">
@@ -65,7 +68,7 @@ export function UpcomingContests({ contests, onAdd }: UpcomingContestsProps) {
                   </div>
                   <button
                     disabled={contest.added}
-                    onClick={() => onAdd(contest)} // Call parent handler
+                    onClick={() => onAdd(contest)}
                     className={`rounded-md px-3 py-1 text-sm transition ${
                       contest.added
                         ? "bg-teal-900/50 text-teal-400 cursor-default"
